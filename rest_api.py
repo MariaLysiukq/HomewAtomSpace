@@ -18,39 +18,38 @@ else:
     print("Response:", response.json())
 
 
-def get_users() -> list[dict]:
+def get_users() -> dict:
     """Get all users."""
     response = requests.get(f"{BASE_URL}/users")
     response.raise_for_status()
-    return response.json()
-
+    return {"status_code": response.status_code,"data": response.json()}
 
 def get_user(user_id: int) -> dict:
     """Get user from ID."""
     response = requests.get(f"{BASE_URL}/users/{user_id}")
     response.raise_for_status()
-    return response.json()
+    return {"status_code": response.status_code,"data": response.json()}
     
     
 def create_user(user_data: dict) -> dict:
     """Create new user"""
     response = requests.post(f"{BASE_URL}/users", json=user_data)
     response.raise_for_status()
-    return response.json()
+    return {"status_code": response.status_code,"data": response.json()}
     
     
 def modify_user(user_id: int, user_data: dict) -> dict:
     """modify user data."""
     response = requests.patch(f"{BASE_URL}/users/{user_id}", json=user_data)
     response.raise_for_status()
-    return response.json()
+    return {"status_code": response.status_code,"data": response.json()}
 
 
 def remove_user(user_id: int) -> dict:
     """delete user from ID."""
     response = requests.delete(f"{BASE_URL}/users/{user_id}")
     response.raise_for_status()
-    return response.json()
+    return {"status_code": response.status_code,"data": response.json()}
 
 
 def main():
@@ -62,13 +61,15 @@ def main():
     
         try:
             if action == "1":
-                users = get_users()
+                dict_respons = get_users()
+                users = dict_respons["data"]
                 print(f"Get {len(users)} users:")
                 for user in users:
                     print(user["name"])
             elif action == "2":    
                 user_id = int(input("Enter user ID: "))
-                user = get_user(user_id)
+                dict_respons = get_user(user_id)
+                user = dict_respons["data"]
                 print(f"ID: {user.get('id')}")
                 print(f"Name: {user.get('name')}")
                 print(f"Username: {user.get('username')}")
@@ -81,7 +82,7 @@ def main():
                 print("\nUser created:", created)
             elif action == "4":
                 user_id = int(input("Enter user ID: "))
-                key = input("What you wanna change (name, email): ")
+                key = input("What you wanna change? (name, email): ")
                 val = input("New value: ")
                 updated = modify_user(user_id, {key: val})
                 print("Modified:", updated)
@@ -97,8 +98,8 @@ def main():
                 
         except ValueError:
             print("Error, id must be an integer")
-        except RequestException as e:
-            print(f"Incorrect API: {e}")
+        except RequestException as error:
+            print(f"Something went wrong during the request: {error}")
             
             
 main()
