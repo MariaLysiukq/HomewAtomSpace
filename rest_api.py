@@ -2,22 +2,6 @@ import requests
 import json
 from requests.exceptions import RequestException
 
-BASE_URL = "https://jsonplaceholder.typicode.com"
-response = requests.get(f"{BASE_URL}/posts/1")
-
-{
-    "status_code": response.status_code,
-    "data": response.json(),
-}
-
-
-if response.status_code == 200:
-    print("Successfull")
-else:
-    print("Something went wrong. Status code:", response.status_code)
-    print("Response:", response.json())
-
-
 def get_users() -> dict:
     """Get all users."""
     response = requests.get(f"{BASE_URL}/users")
