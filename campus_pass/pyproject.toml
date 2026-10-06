@@ -1,0 +1,8 @@
+[project]
+name = "campus_pass_api"
+version = "0.1.0"
+dependencies = [
+    "email-validator",
+    "fastapi[standard]",
+    "pydantic"
+]
